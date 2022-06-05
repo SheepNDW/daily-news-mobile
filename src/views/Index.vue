@@ -1,7 +1,9 @@
-<script setup></script>
+<script setup>
+import HomeHeader from '@/components/HomeHeader.vue'
+</script>
 
 <template>
-  <div>首頁</div>
+  <HomeHeader time="" />
 </template>
 
 <style lang="scss" scoped></style>
