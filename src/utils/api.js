@@ -4,7 +4,7 @@ import request from './http'
  * 獲取今日新聞
  * @returns Promise
  */
-const getNewsLatest = () => {
+export const getNewsLatest = () => {
   return request('/news_latest', 'get')
 }
 
@@ -13,11 +13,6 @@ const getNewsLatest = () => {
  * @param {String} time - 日期
  * @returns Promise
  */
-const getNewsBefore = (time) => {
+export const getNewsBefore = (time) => {
   return request(`/news_before`, 'get', { time })
-}
-
-export default {
-  getNewsLatest,
-  getNewsBefore
 }
