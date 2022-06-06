@@ -3,10 +3,11 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-    }
+    },
+    "jsx": "preserve"
   },
   "exclude": ["node_modules", "dist"],
-  "vueCompilerOptions": {
-    "experimentalDisableTemplateSupport": true
-  }
+  // "vueCompilerOptions": {
+  //   "experimentalDisableTemplateSupport": true
+  // }
 }
