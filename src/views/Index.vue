@@ -1,11 +1,14 @@
 <script setup>
 import HomeHeader from '@/components/HomeHeader.vue'
-import { getNewsLatest } from '@/utils/api'
-import { ref } from 'vue'
+import NewsItem from '@/components/NewsItem.vue'
+import { onMounted, ref } from 'vue'
+import { getNewsBefore, getNewsLatest } from '@/utils/api'
+import { formatTime } from '@/assets/utils'
 
 const today = ref('')
 const newsList = ref([])
 const bannerList = ref([])
+const loadMoreRef = ref(null)
 
 getNewsLatest().then((data) => {
   const { date, stories, top_stories } = data
@@ -18,10 +21,25 @@ getNewsLatest().then((data) => {
   )
   bannerList.value = Object.freeze(top_stories)
 })
+
+onMounted(() => {
+  const observer = new IntersectionObserver(async (changes) => {
+    const item = changes[0]
+    if (item.isIntersecting) {
+      const data = await getNewsBefore(
+        newsList.value[newsList.value.length - 1]['date']
+      )
+      newsList.value.push(Object.freeze(data))
+    }
+  })
+  observer.observe(loadMoreRef.value)
+})
 </script>
 
 <template>
+  <!-- 頭部 -->
   <HomeHeader :time="today" />
+  <!-- 輪播 -->
   <section class="banner-box">
     <van-swipe v-if="bannerList.length > 0" autoplay="3000" lazy-render>
       <van-swipe-item v-for="item in bannerList" :key="item.id">
@@ -35,6 +53,25 @@ getNewsLatest().then((data) => {
       </van-swipe-item>
     </van-swipe>
   </section>
+  <!-- 新聞列表 -->
+  <van-skeleton title :row="5" v-if="newsList.length === 0"></van-skeleton>
+  <template v-else>
+    <section class="news-box" v-for="(item, index) in newsList" :key="index">
+      <van-divider content-position="left" v-if="index !== 0">
+        {{ formatTime(item.date, '{1}月{2}日') }}
+      </van-divider>
+      <div class="news-box__content">
+        <NewsItem
+          v-for="subItem in item.stories"
+          :key="subItem.id"
+          :data="subItem"
+        />
+      </div>
+    </section>
+  </template>
+  <div class="lazy-more" v-show="newsList.length !== 0" ref="loadMoreRef">
+    <van-loading size="12px">載入更多新聞中...</van-loading>
+  </div>
 </template>
 
 <style lang="scss" scoped>
@@ -107,5 +144,29 @@ getNewsLatest().then((data) => {
     font-size: 12px;
     line-height: 20px;
   }
+}
+
+.news-box {
+  padding: 0 15px;
+
+  .van-divider {
+    margin: 5px 0;
+    font-size: 12px;
+
+    &::before {
+      display: none;
+    }
+  }
+}
+
+.van-skeleton {
+  padding: 30px 15px;
+}
+
+.lazy-more {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  background-color: #f4f4f4;
 }
 </style>

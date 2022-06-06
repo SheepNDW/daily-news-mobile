@@ -1,9 +1,14 @@
-import { Button, Swipe, SwipeItem } from 'vant'
+import { Swipe, SwipeItem, Divider, Skeleton, Lazyload, Loading } from 'vant'
 
 export default {
   install(app) {
-    app.use(Button)
     app.use(Swipe)
     app.use(SwipeItem)
+    app.use(Divider)
+    app.use(Skeleton)
+    app.use(Lazyload, {
+      lazyComponent: true
+    })
+    app.use(Loading)
   }
 }
