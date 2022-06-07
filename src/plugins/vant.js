@@ -1,4 +1,12 @@
-import { Swipe, SwipeItem, Divider, Skeleton, Lazyload, Loading } from 'vant'
+import {
+  Swipe,
+  SwipeItem,
+  Divider,
+  Skeleton,
+  Lazyload,
+  Loading,
+  Icon
+} from 'vant'
 
 export default {
   install(app) {
@@ -10,5 +18,6 @@ export default {
       lazyComponent: true
     })
     app.use(Loading)
+    app.use(Icon)
   }
 }
