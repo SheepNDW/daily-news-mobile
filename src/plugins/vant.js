@@ -5,7 +5,12 @@ import {
   Skeleton,
   Lazyload,
   Loading,
-  Icon
+  Icon,
+  NavBar,
+  Form,
+  Field,
+  CellGroup,
+  Button
 } from 'vant'
 
 export default {
@@ -19,5 +24,10 @@ export default {
     })
     app.use(Loading)
     app.use(Icon)
+    app.use(NavBar)
+    app.use(Form)
+    app.use(Field)
+    app.use(CellGroup)
+    app.use(Button)
   }
 }

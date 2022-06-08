@@ -1,3 +1,18 @@
+// 檢查是不是純物件
+const hasOwn = Object.prototype.hasOwnProperty
+export const isPlainObject = function isPlainObject(obj) {
+  let proto, Ctro
+  if (!obj || Object.prototype.toString.call(obj) !== '[object Object]') {
+    return false
+  }
+  proto = Object.getPrototypeOf(obj)
+  if (!proto) {
+    return true
+  }
+  Ctro = hasOwn.call(proto, 'constructor') && proto.constructor
+  return typeof Ctro === 'function' && Ctro === Object
+}
+
 // 處理最大寬度
 export const handleMaxWidth = () => {
   const HTML = document.documentElement
