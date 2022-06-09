@@ -1,5 +1,6 @@
 <script setup>
-import { computed, reactive } from 'vue'
+import { computed, onBeforeMount } from 'vue'
+import { useStore } from '@/store'
 import { formatTime } from '@/assets/utils'
 import timg from '@/assets/images/timg.jpg'
 
@@ -10,8 +11,15 @@ const props = defineProps({
   }
 })
 
-const state = reactive({
-  pic: timg
+const store = useStore()
+onBeforeMount(() => {
+  if (store.isLogin === null) store.changeIsLogin()
+  if (store.info === null) store.changeInfo()
+})
+
+const pic = computed(() => {
+  if (store.isLogin) return store.info?.pic || timg
+  return timg
 })
 
 const currTime = computed(() => {
@@ -49,7 +57,7 @@ const currTime = computed(() => {
       <h1 class="header-box__title">知乎日報</h1>
     </div>
     <RouterLink to="/person" class="header-box__link-btn">
-      <img :src="state.pic" alt="user avatar" />
+      <img :src="pic" alt="user avatar" />
     </RouterLink>
   </header>
 </template>
