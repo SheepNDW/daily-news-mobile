@@ -10,7 +10,8 @@ import {
   Form,
   Field,
   CellGroup,
-  Button
+  Button,
+  Cell
 } from 'vant'
 
 export default {
@@ -29,5 +30,6 @@ export default {
     app.use(Field)
     app.use(CellGroup)
     app.use(Button)
+    app.use(Cell)
   }
 }
