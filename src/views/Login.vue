@@ -4,7 +4,7 @@ import { useStore } from '@/store'
 import { getPhoneCode, login } from '@/utils/api'
 import { Toast } from 'vant'
 import { reactive, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 
 const regPhone = /^1\d{10}$/
 const regCode = /^\d{6}$/
@@ -39,6 +39,7 @@ const sendCode = async () => {
 }
 
 const store = useStore()
+const route = useRoute()
 const router = useRouter()
 const onSubmit = async () => {
   const { code, token } = await login(loginForm.phone, loginForm.code)
@@ -53,7 +54,11 @@ const onSubmit = async () => {
   store.changeIsLogin()
   store.changeInfo()
   Toast.success('登入成功!')
-  router.back()
+
+  // 跳轉至指定位置
+  const from = route.query.from
+  if (from) return router.replace(`/${from}`)
+  router.replace('/person')
 }
 </script>
 
