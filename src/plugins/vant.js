@@ -11,7 +11,8 @@ import {
   Field,
   CellGroup,
   Button,
-  Cell
+  Cell,
+  Uploader
 } from 'vant'
 
 export default {
@@ -31,5 +32,6 @@ export default {
     app.use(CellGroup)
     app.use(Button)
     app.use(Cell)
+    app.use(Uploader)
   }
 }
