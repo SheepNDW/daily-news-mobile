@@ -18,6 +18,7 @@ const signOut = () => {
   localStorage.removeItem('dailyNewsToken')
   store.isLogin = null
   store.info = null
+  store.storeList = null
   router.push('/')
 }
 </script>

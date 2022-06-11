@@ -1,10 +1,11 @@
 import { defineStore } from 'pinia'
-import { checkLogin, getUserInfo } from '@/utils/api'
+import { checkLogin, getStoreNews, getUserInfo } from '@/utils/api'
 
 export const useStore = defineStore('main', {
   state: () => ({
     isLogin: null,
-    info: null
+    info: null,
+    storeList: null
   }),
   actions: {
     async changeIsLogin() {
@@ -16,6 +17,15 @@ export const useStore = defineStore('main', {
     async changeInfo() {
       const { code, data } = await getUserInfo()
       if (code === 0) this.info = data
+    },
+    async changeStoreList() {
+      const { code, data } = await getStoreNews()
+      if (code !== 0) data = []
+      this.storeList = data
+    },
+    removeStoreItem(id) {
+      if (this.storeList === null) return
+      this.storeList = this.storeList.filter((item) => item.id !== id)
     }
   }
 })

@@ -12,7 +12,9 @@ import {
   CellGroup,
   Button,
   Cell,
-  Uploader
+  Uploader,
+  SwipeCell,
+  Empty
 } from 'vant'
 
 export default {
@@ -33,5 +35,7 @@ export default {
     app.use(Button)
     app.use(Cell)
     app.use(Uploader)
+    app.use(SwipeCell)
+    app.use(Empty)
   }
 }

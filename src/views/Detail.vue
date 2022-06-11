@@ -1,15 +1,57 @@
 <script setup>
-import { getNewsCommentsById, getNewsDetailById } from '@/utils/api'
-import { onBeforeUnmount, onUpdated, ref } from 'vue'
+import { useStore } from '@/store'
+import {
+  getNewsCommentsById,
+  getNewsDetailById,
+  setStoreNews
+} from '@/utils/api'
+import { Toast } from 'vant'
+import { computed, onBeforeMount, onBeforeUnmount, onUpdated, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const router = useRouter()
 const route = useRoute()
+const store = useStore()
 
 const { newsComments, newsPopularity, newsInfo, getNewsDetail } =
   useNewsDetail()
 
 getNewsDetail()
+
+const isStore = computed(() => {
+  let { isLogin, storeList } = store
+  if (!Array.isArray(storeList)) storeList = []
+  if (isLogin) {
+    return storeList.some((item) => item.news.id === route.params.id)
+  }
+  return false
+})
+
+const handleStore = async () => {
+  if (!store.isLogin) {
+    Toast('請先登入')
+    router.push({
+      path: '/login',
+      query: {
+        from: `detail/${route.params.id}`
+      }
+    })
+    return
+  }
+  if (isStore.value) return
+  const { code } = await setStoreNews(route.params.id)
+  if (code !== 0) return Toast('收藏失敗')
+  Toast('已收藏')
+  store.changeStoreList()
+}
+
+onBeforeMount(async () => {
+  if (store.isLogin === null) await store.changeIsLogin()
+  if (store.isLogin) {
+    if (store.info === null) store.changeInfo()
+    if (store.storeList === null) store.changeStoreList()
+  }
+})
 
 const handleGoBack = () => {
   router.back()
@@ -71,7 +113,11 @@ function useNewsDetail() {
     <van-icon name="arrow-left" @click="handleGoBack" />
     <van-icon name="comment-o" :badge="newsComments" />
     <van-icon name="good-job-o" :badge="newsPopularity" />
-    <van-icon name="star-o" color="#1989fa" />
+    <van-icon
+      name="star-o"
+      :color="isStore ? '#1989fa' : '#000'"
+      @click="handleStore"
+    />
     <van-icon name="share-o" color="#ccc" />
   </div>
 </template>

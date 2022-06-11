@@ -52,13 +52,15 @@ const onSubmit = async () => {
 
   localStorage.setItem('dailyNewsToken', token)
   store.changeIsLogin()
-  store.changeInfo()
-  Toast.success('登入成功!')
+  store.changeInfo().then(() => {
+    Toast.success('登入成功!')
+    store.storeList = null
 
-  // 跳轉至指定位置
-  const from = route.query.from
-  if (from) return router.replace(`/${from}`)
-  router.replace('/person')
+    // 跳轉至指定位置
+    const from = route.query.from
+    if (from) return router.replace(`/${from}`)
+    router.replace('/person')
+  })
 }
 </script>
 
