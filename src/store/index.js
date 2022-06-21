@@ -19,7 +19,7 @@ export const useStore = defineStore('main', {
       if (code === 0) this.info = data
     },
     async changeStoreList() {
-      const { code, data } = await getStoreNews()
+      let { code, data } = await getStoreNews()
       if (code !== 0) data = []
       this.storeList = data
     },
